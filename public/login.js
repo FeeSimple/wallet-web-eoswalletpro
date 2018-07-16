@@ -103,7 +103,7 @@ $("#scatter-unlock").on("click", function() {
 	if(foundScatter) {
 
 		//returns public key
-		scatter.getIdentity({accounts:[{blockchain:'eos', host:'192.99.200.155', port:8888, chainId: "01750cf763fbac963c344639d96ce503eadbf045aa7e4da67813290673112fd7"}]}).then(identity => {
+		scatter.getIdentity({accounts:[{blockchain:'eos', httpEndpoint: 'http://138.197.194.220:8877/', chainId: "1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32"}]}).then(identity => {
 			if (identity.accounts) {
 				let account_arr = identity.accounts;
 				toggleHide("#account-pick-box", true);
