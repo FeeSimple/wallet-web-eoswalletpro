@@ -6,7 +6,8 @@ module.exports = AssetCache
 function AssetCache(network) {
   const cache = {
     'SYS@eosio.token': {precision: 4},
-    'EOS@eosio.token': {precision: 4}
+    'EOS@eosio.token': {precision: 4},
+    'XFS@eosio.token': {precision: 4}
   }
 
   /**

@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>EOS Wallet Pro | Login</title>
+	<title>FeeSimple (XFS) Wallet | Login</title>
 
 	<link rel="shortcut icon" href="favicon.png" type="image/png">
 
@@ -23,7 +23,7 @@
 		<form id="offline-form">
 			From Account<input id="offline-from" class="login-dimensions offline-x"type="text" placeholder="Enter account you are sending from - e.g. 'pablopiccasso'">
 			To Account<input id="offline-to" type="text" class="login-dimensions offline-x" placeholder="Enter account you are sending to - e.g. 'libertylion1'">
-			Amount<input id="offline-amount" class="login-dimensions offline-x" type="text" placeholder="Enter the amount you are sending + the token symbol - e.g. '3.56 EOS'">
+			Amount<input id="offline-amount" class="login-dimensions offline-x" type="text" placeholder="Enter the amount you are sending + the token symbol - e.g. '3.56 XFS'">
 		</form>
 		<button  id="generate-tx-offline-but" class="2-but offline-next button-green">Generate Transaction</button>
 		<h3 id="generate-success" class="hide">Success - Tranasaction generated!</h3>
@@ -90,7 +90,7 @@
 	</div>
 
 	<div class="login show">
-	<header id="header"><div id="header-box"><h1 id="hashbit-text">HASHBIT</h1><h1 id="eos-price">1 EOS: <%= price%> USD</h1></div></header>
+	<header id="header"><div id="header-box"><h1 id="hashbit-text">HASHBIT</h1><h1 id="eos-price">1 XFS: <%= price%> USD</h1></div></header>
 	<div id="login-box">
 		<h3 id="start-offline">Offline Transaction</h3>
 		<div id="telegram1"><button id="telegram" class="button-blue" onclick="window.open('https://t.me/eoswalletpro','_blank');">Join us on Telegram</button></div>
@@ -172,7 +172,7 @@
 	<!------------------------------------------------------------------------------->
 
 	<div class="main-wallet hide">
-		<header id="header"><div id="header-box"><h1 id="hashbit-text" class="header-text">HASHBIT</h1><h1 id="walletpro-text" class="center header-text">eoswalletpro.com</h1><h1 id="eos-price" class="header-text">1 EOS: <%= price%> USD</h1></div></header>
+		<header id="header"><div id="header-box"><h1 id="hashbit-text" class="header-text">HASHBIT</h1><h1 id="walletpro-text" class="center header-text">eoswalletpro.com</h1><h1 id="eos-price" class="header-text">1 XFS: <%= price%> USD</h1></div></header>
 
 		<div id="account-details" class="center box">
 			<h1 id="account-name" class="account-names">dylan</h1>
@@ -191,7 +191,7 @@
 				<p class="send-subs" id="memo-sub">Memo (optional)</p>
 				<input type="text" id="memo" class="send-bars center" placeholder="Enter a message to be sent with your transaction">
 				<select id="selector">
-					<option value="FST">FST</option>
+					<option value="XFS">XFS</option>
 				</select>
 				<p id="send-all">Send entire eos balance</p>
 			</form>
@@ -208,7 +208,7 @@
 			<div class="block-i">
 				<button class="button-blue blocks center" id="get-account">View Account History</button>
 				<button class="button-green blocks center" id="buy-eos">Lookup Account</button>
-				<button class="button-green blocks center" id="buy-token" onclick="window.open('https://www.binance.com/tradeDetail.html?symbol=EOS_USDT','_blank');">Purchase EOS</button>
+				<button class="button-green blocks center" id="buy-token" onclick="window.open('https://www.binance.com/tradeDetail.html?symbol=EOS_USDT','_blank');">Purchase XFS</button>
 				<button class="button-green blocks center" id="buy-tokens">Purchase Tokens</button>
 			</div>
 		</div>
@@ -223,7 +223,7 @@
 		<div id="account-deets">
 			<h1 id="account-deet-title">Your Account Details</h1>
 			<div id="further-deets">
-				<h1 id="account-balance" class="account-subs">Balance: 0 EOS</h1>
+				<h1 id="account-balance" class="account-subs">Balance: 0 XFS</h1>
 				<h1 id="cpu-limit" class="account-subs">CPU limit: 0</h1>
 				<h1 id="ram-usage" class="account-subs">Ram usage: 0</h1>
 				<h1 id="ram-quota" class="account-subs">Ram quota: 0</h1>

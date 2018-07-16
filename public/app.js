@@ -12305,7 +12305,7 @@ $("#generate-tx-offline-but").on("click", function(){
 		$("#generate-error").text("Error - Due to the new Dawn4.2.0 standard accounts must be exactly 12 characters long");
 		toggleHide("#generate-error", true);
 	} else if (splitCheck.length !== 2) {
-		$("#generate-error").text("Error - Please include a space between the amount and the token name e.g. '1 EOS' or '2.36 JUNGLE'");
+		$("#generate-error").text("Error - Please include a space between the amount and the token name e.g. '1 XFS' or '2.36 JUNGLE'");
 		toggleHide("#generate-error", true);
 	} else {
 		$.post('/transaction', {from: from, to: to, amount: amount}, function(data, status) {
