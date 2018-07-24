@@ -1,4 +1,4 @@
-# eoswalletpro.com
+# feesimple.io/wallet
 
 A secure, native eos wallet for storing eos and tokens that follow the eosio.token standard.
 
