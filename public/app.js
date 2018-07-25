@@ -12357,7 +12357,7 @@ $(".4-but").on("click", function(){
 })
 
 $(".explorer").on("click", function(){
-	window.open(`http://eospark.com`,'_blank');
+	window.open(`http://138.197.194.220:4200`,'_blank');
 });
 
 
