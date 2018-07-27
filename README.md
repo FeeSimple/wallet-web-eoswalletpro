@@ -18,3 +18,9 @@ node app
 Now you can visit: 
 http://localhost:3000
 http://127.0.0.1:3000
+
+# Enable HTTPS
+
+Ref link: https://medium.com/@yash.kulshrestha/using-lets-encrypt-with-express-e069c7abe625  
+
+Command: `certbot certonly --webroot -w ./public -d feesimplewallet.io`

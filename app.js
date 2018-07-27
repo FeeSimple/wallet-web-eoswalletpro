@@ -1,12 +1,20 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+
+const https = require('https');
+const fs = require('fs');
+
 var path = require('path');
 var Eos = require('./eos-pro/eosjs/src/index');
 var eos = Eos({httpEndpoint: 'http://138.197.194.220:8877', chainId: "1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32"});
 
-
 var app = express();
 var port = 3000;
+
+const options = {
+    cert: fs.readFileSync('/etc/letsencrypt/live/feesimplewallet.io-0002/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/feesimplewallet.io-0002/privkey.pem')
+};
 
 //view
 app.set('view engine', 'ejs');
@@ -33,6 +41,9 @@ getPrice();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+//Prevent click jacking
+app.use(require('helmet')());
+
 //Set static path for assets
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -57,6 +68,9 @@ app.get('/', function(req, res) {
 app.listen(port, function() {
 	console.log(`Listening on port ${port}`);
 });
+
+//Default port for HTTPS is 443
+https.createServer(options, app).listen(443);
 
 app.post('/getkeyaccount', function(req, res, status){
 	let params = req.body;
