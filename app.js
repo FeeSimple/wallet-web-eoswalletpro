@@ -1,24 +1,32 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 
-const https = require('https');
+var httpsServer = require('https');
+var httpServer = require('http');
 const fs = require('fs');
 
 var path = require('path');
 var Eos = require('./eos-pro/eosjs/src/index');
 var eos = Eos({httpEndpoint: 'http://138.197.194.220:8877', chainId: "1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32"});
 
-var app = express();
+var httpsApp = express();
+var httpApp = express();
 var port = 3000;
 
-const options = {
+const httpsOpt = {
     cert: fs.readFileSync('/etc/letsencrypt/live/feesimplewallet.io-0002/fullchain.pem'),
     key: fs.readFileSync('/etc/letsencrypt/live/feesimplewallet.io-0002/privkey.pem')
 };
 
 //view
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+httpsApp.set('view engine', 'ejs');
+httpsApp.set('views', path.join(__dirname, 'views'));
+httpsApp.set('port', 443); // default port for https is 443
+
+httpApp.set('port', 80); // default port for http is 80
+httpApp.get("*", function (req, res, next) {
+    res.redirect("https://" + req.headers.host + "/" + req.path);
+});
 
 var fetchUrl = require("fetch").fetchUrl;
 
@@ -38,16 +46,16 @@ function getPrice() {
 getPrice();
 
 //Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+httpsApp.use(bodyParser.json());
+httpsApp.use(bodyParser.urlencoded({extended: false}));
 
 //Prevent click jacking
-app.use(require('helmet')());
+httpsApp.use(require('helmet')());
 
 //Set static path for assets
-app.use(express.static(path.join(__dirname, 'public')));
+httpsApp.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', function(req, res) {
+httpsApp.get('/', function(req, res) {
 	eos.getInfo({}).then(result=> {
 		let blockNum = result.head_block_num;
 		let lastBlock = result.last_irreversible_block_num;
@@ -65,14 +73,15 @@ app.get('/', function(req, res) {
 	}).catch(err=>{res.send({error: err}); res.end()});;
 });
 
-app.listen(port, function() {
-	console.log(`Listening on port ${port}`);
+httpServer.createServer(httpApp).listen(httpApp.get('port'), function() {
+	console.log('Express HTTP server listening on port ' + httpApp.get('port'));
 });
 
-//Default port for HTTPS is 443
-https.createServer(options, app).listen(443);
+httpsServer.createServer(httpsOpt, httpsApp).listen(httpsApp.get('port'), function() {
+	console.log('Express HTTPS server listening on port ' + httpsApp.get('port'));
+});
 
-app.post('/getkeyaccount', function(req, res, status){
+httpsApp.post('/getkeyaccount', function(req, res, status){
 	let params = req.body;
 	eos.getKeyAccounts(params.pubkey).then(result1=>{
 		let accounts = result1.account_names;
@@ -84,7 +93,7 @@ app.post('/getkeyaccount', function(req, res, status){
 	});
 });
 
-app.post('/lookupacct', function(req, res, status){
+httpsApp.post('/lookupacct', function(req, res, status){
 	eos.getAccount(req.body.targetAcct).then(result=>{
 		let account = req.body.targetAcct;
 		let created = result.created;
@@ -96,14 +105,14 @@ app.post('/lookupacct', function(req, res, status){
 	}).catch(err=>{res.send(err); res.end();});
 });
 
-app.post('/getbalance', function (req, res){
+httpsApp.post('/getbalance', function (req, res){
 	eos.getTableRows({code: 'eosio.token', scope: req.body.targetAcct, table: 'accounts', json: true}).then(result2=>{
 		res.send(result2.rows);
 		res.end();
 	}).catch(err=>{res.send({e: err}); res.end();});
 });
 
-app.post('/pubtoacct', function(req, res){
+httpsApp.post('/pubtoacct', function(req, res){
 	eos.getAccount(req.body.account_target).then(result=>{
 		let ram_quota = result.ram_quota;
 		let ram_usage = result.ram_usage;
@@ -135,7 +144,7 @@ app.post('/pubtoacct', function(req, res){
 
 //----------------------- LOGIN WITH PUBLIC KEY ------------------------//
 
-app.post('/login', function(req, res, status){
+httpsApp.post('/login', function(req, res, status){
 	let params = req.body;
 	let pubkey = req.body.pubkey
 	eos.getAccount(params.account).then(result1=>{
@@ -159,7 +168,7 @@ app.post('/login', function(req, res, status){
 
 let alphabet = "abcdefghijklmnopqurstuvwxyz12345"
 
-app.post('/createaccount', function(req, res, status) {
+httpsApp.post('/createaccount', function(req, res, status) {
 	let key = req.body.pubkey;
 	let rand = alphabet[Math.floor(Math.random()*alphabet.length)];
 	eos.newaccount({creator: 'justin', name: rand, owner: key, active: key}).then(result=>{
@@ -175,7 +184,7 @@ app.post('/createaccount', function(req, res, status) {
 
 //----------------------- CREATE RAW EOS TRANSACTION ------------------------//
 
-app.post('/transaction', function(req, res, status) {
+httpsApp.post('/transaction', function(req, res, status) {
 	let params = req.body;
 	let memo = params.memo;
 	eos.getAccount(params.to).then(result1=>{
@@ -216,7 +225,7 @@ app.post('/transaction', function(req, res, status) {
 
 //----------------------- PUSH SIGNED TRANSACTION ------------------------//
 
-app.post('/pushtransaction', function(req, res) {
+httpsApp.post('/pushtransaction', function(req, res) {
 	if (req.body.sigs) {
 		let sigver = Eos.modules.ecc.Signature.from(req.body.sigs).toString();
 		let lasig = [sigver];
