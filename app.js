@@ -29,7 +29,7 @@ httpApp.get("*", function (req, res, next) {
 	if (host.match(/^www/) !== null ) {
     host = host.replace(/^www\./, '');
   }	
-	res.redirect("https://" + host + "/" + req.path);
+	res.redirect("https://" + host + req.path);
 });
 
 var fetchUrl = require("fetch").fetchUrl;
