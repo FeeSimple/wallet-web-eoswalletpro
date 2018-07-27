@@ -12443,19 +12443,22 @@ $("#loginbut").on('click', function() {
 		} else {*/
 		$.post('/getkeyaccount', {pubkey: pub}, function(data){
 			if (data.accounts) {
-				let account_arr = data.accounts;
+                let account_arr = data.accounts;
+                console.log('account_arr: ', account_arr);
 				toggleHide("#account-pick-box", true);
 				$("#account-list").empty();
 				if (account_arr.length >= 1){
 								toggleHide("#no-account", false);
 								for (let i = 0; i < account_arr.length; i++) {
 									$("#account-list").append(`<li class="lili" id=${account_arr[i]}>${account_arr[i]} <button class='button-blue pick-account-buts'>Use This Account</button></li>`);
-									$(`#${account_arr[i]}`).on("click", function(){
+                                    //console.log('account_arr[i]', account_arr[i]);
+                                    $(`#${account_arr[i]}`).on("click", function(){
 										toggleHide(".login", false);
 										toggleHide(".main-wallet", true);
 										toggleHide("#account-pick-box", false);
-										$("#account-name").text(`Account: ${account_arr[i]}`);
-										getAccountLink = account_arr[i]
+                                        $("#account-name").text(`Account: ${account_arr[i]}`);
+                                        console.log('account_arr[i]', account_arr[i]);
+                                        getAccountLink = account_arr[i]
 										$("#get-account").on("click", function(){
 											window.open(`http://eospark.com/MainNet/account/${account_arr[i]}`,'_blank');
 										});
