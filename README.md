@@ -22,5 +22,6 @@ http://127.0.0.1:3000
 # Enable HTTPS
 
 Ref link: https://medium.com/@yash.kulshrestha/using-lets-encrypt-with-express-e069c7abe625  
+Ref link: https://gist.github.com/ryanhanwu/5321302
 
-Command: `certbot certonly --webroot -w ./public -d feesimplewallet.io`
+Command: `certbot certonly --webroot -w ./public -d www.feesimplewallet.io -d feesimplewallet.io`
