@@ -6,7 +6,7 @@ var httpServer = require('http');
 const fs = require('fs');
 
 var path = require('path');
-var Eos = require('./eos-pro/eosjs/src/index');
+var Eos = require('eosjs'); //require('./eos-pro/eosjs/src/index');
 
 const adminAccount = {
 	name: 'usertrung123',
