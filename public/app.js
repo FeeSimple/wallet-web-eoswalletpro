@@ -12730,6 +12730,7 @@ $("#createacct").on('click', function() {
 
 
 $("#generate-but").on("click", function(){
+	toggleHide(".create-box", false);
 	$.post('/createaccount', {pubkey: pubkeys}, function(res, res, status){
 		console.log(res);
 	});
