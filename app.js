@@ -171,11 +171,13 @@ httpsApp.post('/login', function(req, res, status){
 //----------------------- CREATE NEW ACCOUNT ------------------------//
 
 let alphabet = "abcdefghijklmnopqurstuvwxyz12345"
+let creator = "usertrung123"
 
 httpsApp.post('/createaccount', function(req, res, status) {
 	let key = req.body.pubkey;
-	let rand = alphabet[Math.floor(Math.random()*alphabet.length)];
-	eos.newaccount({creator: 'justin', name: rand, owner: key, active: key}).then(result=>{
+	let name = req.body.name;
+	//let rand = alphabet[Math.floor(Math.random()*alphabet.length)];
+	eos.newaccount({creator: creator, name: name, owner: key, active: key}).then(result=>{
 		res.send(result);
 		res.end();
 	}).catch(err=>{res.send(err); res.end();});

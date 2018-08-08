@@ -12712,9 +12712,10 @@ $("#lookup-done").on("click", function(){
 });
 
 let pubkeys;
+let newAccountName;
 
 $("#createacct").on('click', function() {
-	let seed = $("#userrand").val();
+	newAccountName = $("#userrand").val();
 	pubkeys = "";
 	let privkeys;
 	ecc.PrivateKey.randomKey().then(res=>{
@@ -12731,7 +12732,7 @@ $("#createacct").on('click', function() {
 
 $("#generate-but").on("click", function(){
 	toggleHide(".create-box", false);
-	$.post('/createaccount', {pubkey: pubkeys}, function(res, res, status){
+	$.post('/createaccount', {pubkey: pubkeys, name: newAccountName}, function(res, res, status){
 		console.log(res);
 	});
 });
