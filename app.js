@@ -19,9 +19,9 @@ const eosConfig = {
 	keyProvider: adminAccount.privKey,
 	httpEndpoint: 'http://138.197.194.220:8877',
 	expireInSeconds: 60,
-	broadcast: true,
-	debug: true, 
-	sign: true
+  	verbose: true,
+  	broadcast: true,
+  	sign: true
 }
 
 var eos = Eos(eosConfig);
