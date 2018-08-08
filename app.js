@@ -7,7 +7,20 @@ const fs = require('fs');
 
 var path = require('path');
 var Eos = require('./eos-pro/eosjs/src/index');
-var eos = Eos({httpEndpoint: 'http://138.197.194.220:8877', chainId: "1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32"});
+
+const adminAccount = {
+	name: 'usertrung123',
+	privKey: '5K6LU8aVpBq9vJsnpCvaHCcyYwzPPKXfDdyefYyAMMs3Qy42fUr'
+}
+
+// Basic configuration of the EOS client
+const eosConfig = {
+	chainId: '1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32',
+	keyProvider: adminAccount.privKey,
+	httpEndpoint: 'http://138.197.194.220:8877',
+}
+
+var eos = Eos(eosConfig);
 
 var httpsApp = express();
 var httpApp = express();
@@ -171,13 +184,13 @@ httpsApp.post('/login', function(req, res, status){
 //----------------------- CREATE NEW ACCOUNT ------------------------//
 
 let alphabet = "abcdefghijklmnopqurstuvwxyz12345"
-let creator = "usertrung123"
 
 httpsApp.post('/createaccount', function(req, res, status) {
 	let key = req.body.pubkey;
 	let name = req.body.name;
 	//let rand = alphabet[Math.floor(Math.random()*alphabet.length)];
-	eos.newaccount({creator: creator, name: name, owner: key, active: key}).then(result=>{
+	eos.newaccount({creator: adminAccount.name, name: name, owner: key, active: key})
+	.then(result=>{
 		res.send(result);
 		res.end();
 	}).catch(err=>{res.send(err); res.end();});
