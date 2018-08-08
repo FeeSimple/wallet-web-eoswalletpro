@@ -186,14 +186,46 @@ httpsApp.post('/login', function(req, res, status){
 let alphabet = "abcdefghijklmnopqurstuvwxyz12345"
 
 httpsApp.post('/createaccount', function(req, res, status) {
-	let key = req.body.pubkey;
-	let name = req.body.name;
-	//let rand = alphabet[Math.floor(Math.random()*alphabet.length)];
-	eos.newaccount({creator: adminAccount.name, name: name, owner: key, active: key})
+	let newAccPubkey = req.body.pubkey;
+	let newAccName = req.body.name;
+	// eos.newaccount({creator: adminAccount.name, name: name, owner: key, active: key})
+	// .then(result=>{
+	// 	res.send(result);
+	// 	res.end();
+	// }).catch(err=>{res.send(err); res.end();});
+
+	eos.transaction(tr => {
+
+    tr.newaccount({
+        creator: adminAccount.name,
+        name: newAccName,
+        owner: newAccPubkey,
+        active: newAccPubkey  
+    });
+
+    tr.buyrambytes({
+        payer: adminAccount.name,
+        receiver: newAccName,
+        bytes: 5000
+    });
+
+    tr.delegatebw({
+        from: adminAccount.name,
+        receiver: newAccName,
+        stake_net_quantity: '1.0000 EOS', 
+        stake_cpu_quantity: '1.0000 EOS', 
+        transfer: 0
+    });
+
+	})
 	.then(result=>{
 		res.send(result);
 		res.end();
-	}).catch(err=>{res.send(err); res.end();});
+	})
+	.catch(err=>{
+		res.send(err); 
+		res.end();
+	});
 });
 
 //----------------------- CREATE NEW ACCOUNT ------------------------//
