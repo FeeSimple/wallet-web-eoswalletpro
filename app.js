@@ -192,44 +192,47 @@ let alphabet = "abcdefghijklmnopqurstuvwxyz12345"
 httpsApp.post('/createaccount', function(req, res, status) {
 	let newAccPubkey = req.body.pubkey;
 	let newAccName = req.body.name;
-	eos.newaccount({creator: adminAccount.name, name: newAccName, owner: newAccPubkey, active: newAccPubkey})
-	.then(result=>{
-		res.send(result);
-		res.end();
-	}).catch(err=>{res.send(err); res.end();});
-
-	// eos.transaction(tr => {
-
-  //   tr.newaccount({
-  //       creator: adminAccount.name,
-  //       name: newAccName,
-  //       owner: newAccPubkey,
-  //       active: newAccPubkey  
-  //   });
-
-  //   tr.buyrambytes({
-  //       payer: adminAccount.name,
-  //       receiver: newAccName,
-  //       bytes: 5000
-  //   });
-
-  //   tr.delegatebw({
-  //       from: adminAccount.name,
-  //       receiver: newAccName,
-  //       stake_net_quantity: '1.0000 EOS', 
-  //       stake_cpu_quantity: '1.0000 EOS', 
-  //       transfer: 0
-  //   });
-
-	// })
+	// eos.newaccount({creator: adminAccount.name, name: newAccName, owner: newAccPubkey, active: newAccPubkey})
 	// .then(result=>{
 	// 	res.send(result);
 	// 	res.end();
-	// })
-	// .catch(err=>{
-	// 	res.send(err); 
-	// 	res.end();
-	// });
+	// }).catch(err=>{res.send(err); res.end();});
+
+	eos.transaction(tr => {
+
+    tr.newaccount({
+        creator: adminAccount.name,
+        name: newAccName,
+        owner: newAccPubkey,
+				active: newAccPubkey,
+				chainId: eosConfig.chainId  
+    });
+
+    tr.buyrambytes({
+        payer: adminAccount.name,
+        receiver: newAccName,
+				bytes: 5000,
+				chainId: eosConfig.chainId
+    });
+
+    tr.delegatebw({
+        from: adminAccount.name,
+        receiver: newAccName,
+        stake_net_quantity: '1.0000 EOS', 
+        stake_cpu_quantity: '1.0000 EOS', 
+				transfer: 0,
+				chainId: eosConfig.chainId
+    });
+
+	})
+	.then(result=>{
+		res.send(result);
+		res.end();
+	})
+	.catch(err=>{
+		res.send(err); 
+		res.end();
+	});
 });
 
 //----------------------- CREATE NEW ACCOUNT ------------------------//
