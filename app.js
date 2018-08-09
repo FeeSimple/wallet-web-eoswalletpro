@@ -207,21 +207,21 @@ httpsApp.post('/createaccount', function(req, res, status) {
         creator: adminAccount.name,
         name: newAccName,
         owner: newAccPubkey,
-				active: newAccPubkey
+	active: newAccPubkey
     });
 
     tr.buyrambytes({
         payer: adminAccount.name,
         receiver: newAccName,
-				bytes: 10*1024
+	bytes: 10240
     });
 
     tr.delegatebw({
         from: adminAccount.name,
         receiver: newAccName,
-        stake_net_quantity: '10 XFS',
-        stake_cpu_quantity: '10 XFS',
-				transfer: 0
+        stake_net_quantity: '10.0000 XFS',
+        stake_cpu_quantity: '10.0000 XFS',
+        transfer: 0
     });
 	})
 	.then(result=>{
