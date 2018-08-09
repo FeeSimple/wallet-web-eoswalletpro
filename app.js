@@ -19,9 +19,9 @@ const eosConfig = {
 	keyProvider: adminAccount.privKey,
 	httpEndpoint: 'http://138.197.194.220:8877',
 	expireInSeconds: 60,
-  	verbose: true,
-  	broadcast: true,
-  	sign: true
+	verbose: true,
+	broadcast: true,
+	sign: true
 }
 
 var eos = Eos(eosConfig);
@@ -192,6 +192,9 @@ let alphabet = "abcdefghijklmnopqurstuvwxyz12345"
 httpsApp.post('/createaccount', function(req, res, status) {
 	let newAccPubkey = req.body.pubkey;
 	let newAccName = req.body.name;
+
+	// Never use directly the API "newaccount()" of eosjs because it uses only the "EOS" symbol
+	// while the native symbol is "XFS".
 	// eos.newaccount({creator: adminAccount.name, name: newAccName, owner: newAccPubkey, active: newAccPubkey})
 	// .then(result=>{
 	// 	res.send(result);
@@ -204,26 +207,22 @@ httpsApp.post('/createaccount', function(req, res, status) {
         creator: adminAccount.name,
         name: newAccName,
         owner: newAccPubkey,
-				active: newAccPubkey,
-				chainId: eosConfig.chainId  
+				active: newAccPubkey
     });
 
     tr.buyrambytes({
         payer: adminAccount.name,
         receiver: newAccName,
-				bytes: 5000,
-				chainId: eosConfig.chainId
+				bytes: 10*1024
     });
 
     tr.delegatebw({
         from: adminAccount.name,
         receiver: newAccName,
-        stake_net_quantity: '1.0000 EOS', 
-        stake_cpu_quantity: '1.0000 EOS', 
-				transfer: 0,
-				chainId: eosConfig.chainId
+        stake_net_quantity: '10 XFS',
+        stake_cpu_quantity: '10 XFS',
+				transfer: 0
     });
-
 	})
 	.then(result=>{
 		res.send(result);
