@@ -8,6 +8,13 @@ A secure, native eos wallet for storing eos and tokens that follow the eosio.tok
 git clone https://github.com/Hashbit-Technologies/eoswalletpro
 cd eoswalletpro
 npm install
+
+cd public
+git clone https://github.com/EOSIO/eosjs-ecc.git
+cd eosjs-ecc
+npm install
+npm run build
+
 cd eos-pro/eosjs
 npm install
 cd ..
