@@ -8,6 +8,10 @@ const fs = require('fs');
 var path = require('path');
 var Eos = require('./eos-pro/eosjs/src/index');
 
+// Must use the module "eosjs" to perform transaction of creating new account.
+// Because the "Eos" from source code doesn't work
+var EosTx = require('eosjs');
+
 const adminAccount = {
 	name: 'usertrung123',
 	privKey: '5K6LU8aVpBq9vJsnpCvaHCcyYwzPPKXfDdyefYyAMMs3Qy42fUr'
@@ -25,6 +29,7 @@ const eosConfig = {
 }
 
 var eos = Eos(eosConfig);
+var eosTx = EosTx(eosConfig);
 
 var httpsApp = express();
 var httpApp = express();
@@ -201,19 +206,19 @@ httpsApp.post('/createaccount', function(req, res, status) {
 	// 	res.end();
 	// }).catch(err=>{res.send(err); res.end();});
 
-	eos.transaction(tr => {
+	eosTx.transaction(tr => {
 
     tr.newaccount({
         creator: adminAccount.name,
         name: newAccName,
         owner: newAccPubkey,
-	active: newAccPubkey
+				active: newAccPubkey
     });
 
     tr.buyrambytes({
         payer: adminAccount.name,
         receiver: newAccName,
-	bytes: 10240
+				bytes: 10240
     });
 
     tr.delegatebw({
