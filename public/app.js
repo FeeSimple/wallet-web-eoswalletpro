@@ -12703,10 +12703,6 @@ $(".lookup-but").on("click", function() {
 	});
 });
 
-$("#createacct").on("click", function(){
-	toggleHide(".create-box", true);
-});
-
 $("#lookup-done").on("click", function(){
 	toggleHide(".lookup-box", false);
 });
@@ -12715,18 +12711,34 @@ let pubkeys;
 let newAccountName;
 
 $("#createacct").on('click', function() {
-	newAccountName = $("#userrand").val();
-	pubkeys = "";
-	let privkeys;
-	ecc.PrivateKey.randomKey().then(res=>{
-		toggleHide(".create-box", true); 
-		let lekey = res.toWif();
-		privkeys = lekey;
-		let pub = ecc.privateToPublic(lekey);
-		pubkeys = pub;
-		$("#pubkeydis").text(pubkeys);
-		$("#privkeydis").text(privkeys);
-	});
+    newAccountName = $("#userrand").val();
+    // Regex for validating the account name
+    // "XRegExp" is exported in the included <script>
+    // <script src="https://unpkg.com/xregexp/xregexp-all.js"></script>
+    const accountRegex = XRegExp.build("^[a-z1-4]*$");
+    if (newAccountName.length !== 12 ||
+        !accountRegex.test(newAccountName)) {
+
+		$("#error-accountname").text("Error - Invalid account name");
+        toggleHide("#error-accountname", true);
+        console.log("Invalid account name (must be 12 symbols long and include symbols a-z 1-4)");
+    }
+    else {
+        toggleHide("#error-accountname", false);
+        pubkeys = "";
+        let privkeys;
+        ecc.PrivateKey.randomKey().then(res=>{
+            toggleHide(".create-box", true); 
+            let lekey = res.toWif();
+            privkeys = lekey;
+            let pub = ecc.privateToPublic(lekey);
+            pubkeys = pub;
+            //$("#pubkeydis").text(pubkeys);
+            // Display the account name instead of public key
+            $("#pubkeydis").text(newAccountName);
+            $("#privkeydis").text(privkeys);
+        });
+    }
 });
 
 

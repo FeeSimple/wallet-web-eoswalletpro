@@ -108,6 +108,7 @@
 			</div>
 		</form>
 		<form class="login-pos">
+			<h2 id="error-accountname" class="hide"></h2>
 			<h2 class="unlock-title">Create Wallet</h2>
 			<input type="text" id="userrand" placeholder="Enter the account name (must be 12 symbols long and include symbols a-z 1-4)" class="login-dimensions">
 			<input type="button" value="CREATE" id="createacct" class="login-buts">
@@ -143,7 +144,8 @@
 	<div class="create-box hide">
 		<h1 class="lookup-tit">Create Wallet</h1>
 		<div id="pubkey-create" class="keydiv">
-			<h3 id="pubkeytit">Your Public Key</h3>
+			<script src="https://unpkg.com/xregexp/xregexp-all.js"></script>
+			<h3 id="pubkeytit">Your Account Name</h3>
 			<h3 class="keydisplay" id="pubkeydis"></h3>
 		</div>
 		<div id="privkey-create" class="keydiv">
