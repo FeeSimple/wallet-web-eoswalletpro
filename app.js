@@ -43,7 +43,7 @@ httpsApp.set('port', 443); // default port for https is 443
 httpApp.set('port', 80); // default port for http is 80
 httpApp.get("*", function (req, res, next) {
 	let host = req.headers.host;
-	if (host.match(/^www/) !== null ) {
+	if (host && host.match(/^www/) !== null ) {
     host = host.replace(/^www\./, '');
   }	
 	res.redirect("https://" + host + req.path);

@@ -12718,10 +12718,9 @@ $("#createacct").on('click', function() {
     const accountRegex = XRegExp.build("^[a-z1-4]*$");
     if (newAccountName.length !== 12 ||
         !accountRegex.test(newAccountName)) {
-
-		$("#error-accountname").text("Error - Invalid account name");
+        let errStr = 'Invalid account name (must be 12 symbols long and include symbols a-z 1-4)' 
+        $("#error-accountname").text(errStr, true);
         toggleHide("#error-accountname", true);
-        console.log("Invalid account name (must be 12 symbols long and include symbols a-z 1-4)");
     }
     else {
         toggleHide("#error-accountname", false);
