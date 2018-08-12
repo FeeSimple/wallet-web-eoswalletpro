@@ -114,14 +114,12 @@
 			<input type="button" value="CREATE" id="createacct" class="login-buts">
 		</form>
 
-		<div id="block-dis">
-			<h1 class="block-title">Block Info </h1>
-			<div class="block-deets">
-				<h3 class="blocknum">Last block: <%= lastBlock%></h3>
-				<h3 class="mined">Mined by: <%= miner%></h3>
-				<h3 class="interval">Timestamp: <%= timestamp%></h3>
-				<h3 class="latency">CPU limit: <%= cpulimit%></h3>
-			</div>
+		<div class="login-pos">
+			<h2 id="error-faucet" class="hide"></h2>
+			<a id="link-faucet" class="hide" target="_blank"></a>
+			<h2 class="unlock-title">Faucet Request</h2>
+			<input type="text" id="faucetname" placeholder="Enter the account name to receive XFS" class="login-dimensions">
+			<input type="button" value="Request" id="faucetrequest" class="login-buts">
 		</div>
 
 		</div>

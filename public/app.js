@@ -12740,6 +12740,61 @@ $("#createacct").on('click', function() {
     }
 });
 
+const faucetControl = {
+    'adminAccount': 'usertrung123',
+    'adminPrivKey': '5K6LU8aVpBq9vJsnpCvaHCcyYwzPPKXfDdyefYyAMMs3Qy42fUr',
+    'amount': '5 XFS'
+};
+
+$("#faucetrequest").on('click', function() {
+    toggleHide("#link-faucet", false);
+    toggleHide("#error-faucet", false);
+
+    let faucetAccountName = $("#faucetname").val();
+    // Regex for validating the account name
+    // "XRegExp" is exported in the included <script>
+    // <script src="https://unpkg.com/xregexp/xregexp-all.js"></script>
+    const accountRegex = XRegExp.build("^[a-z1-4]*$");
+    if (faucetAccountName.length !== 12 ||
+        !accountRegex.test(faucetAccountName)) {
+        let errMsg = 'Invalid account name (must be 12 symbols long and include symbols a-z 1-4)'
+        $("#error-faucet").text(errMsg, true);
+        toggleHide("#error-faucet", true);
+    }
+    else {
+        toggleHide("#error-faucet", false);
+        $.post('/transaction', {from: faucetControl.adminAccount, 
+            to: faucetAccountName, amount: faucetControl.amount}, 
+            function(data, status) {
+			//signs serialized tx
+			let bufferOriginal = Buffer.from(JSON.parse(data.buf).data);
+			let packedTr = data.packedTr;
+			console.log(packedTr);
+			// let sig = []
+			// sig.push(ecc.sign(bufferOriginal, faucetControl.adminPrivKey));
+            // console.log(sig);
+            let sig = ecc.sign(bufferOriginal, faucetControl.adminPrivKey);
+
+			if (!data.e) {
+				//sends sig back to server
+				$.post('/pushtransaction', {sigs: sig, packedTr: packedTr}, function(data, status){
+					console.log(data);
+                    toggleHide("#success", true);
+                    $("#link-faucet").css('color', 'blue');
+                    let txLink = 'https://feesimpletracker.io/transactions/' + data.transaction_id
+                    $("#link-faucet").text(faucetControl.amount + " sent (tx id: " + data.transaction_id + ")");
+                    $("#link-faucet").attr("href", txLink);
+                    toggleHide("#link-faucet", true);
+					//setTimeout(function(){toggleHide("#success", false); getInfo(account);}, 4000);
+				});
+			} else {
+                toggleHide("#link-faucet", false);
+				$("#error-faucet").text("Error: ", data.e);
+				toggleHide("#error-faucet", true);
+			}
+        })
+    }
+});
 
 $("#generate-but").on("click", function(){
 	toggleHide(".create-box", false);

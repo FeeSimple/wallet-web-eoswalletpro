@@ -635,6 +635,26 @@ html,body {
 	font-weight: 50;
 }
 
+#error-faucet {
+	position: absolute;
+	left: 14.7%;
+	text-align: center;
+	font-size: 12px;
+	color: #FF004E;
+	top: 346px;
+	font-weight: 50;
+}
+
+#link-faucet {
+	position: absolute;
+	left: 14.7%;
+	text-align: center;
+	font-size: 12px;
+	color: #0072FF;
+	top: 360px;
+	font-weight: 50;
+}
+
 .lookup-but {
 	position: absolute;
 	left: 60%;
