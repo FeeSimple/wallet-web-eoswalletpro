@@ -541,9 +541,9 @@ html,body {
 	font-size: 12px;
 	left: 50%;
 	transform: translate(-50%);
-	top: 83%;
-	width: 70%;
-	height: 50px;
+	top: 10%;
+	width: 30%;
+	height: 30px;
 	background-color: #0072FF;
 	color: white;
 	border-radius: 3px;
@@ -610,8 +610,8 @@ html,body {
 	left: 50%;
 	top: 170px;
 	transform: translate(-50%);
-	height: 550px;
-	width: 800px;
+	height: 350px;
+	width: 700px;
 	z-index: 100;
 }
 
