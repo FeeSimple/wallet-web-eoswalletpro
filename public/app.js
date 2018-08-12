@@ -12709,6 +12709,7 @@ $("#lookup-done").on("click", function(){
 
 let pubkeys;
 let newAccountName;
+let privkeys;
 
 $("#createacct").on('click', function() {
     newAccountName = $("#userrand").val();
@@ -12718,14 +12719,13 @@ $("#createacct").on('click', function() {
     const accountRegex = XRegExp.build("^[a-z1-4]*$");
     if (newAccountName.length !== 12 ||
         !accountRegex.test(newAccountName)) {
-        let errStr = 'Invalid account name (must be 12 symbols long and include symbols a-z 1-4)' 
-        $("#error-accountname").text(errStr, true);
+        let errMsg = 'Invalid account name (must be 12 symbols long and include symbols a-z 1-4)'
+        $("#error-accountname").text(errMsg, true);
         toggleHide("#error-accountname", true);
     }
     else {
         toggleHide("#error-accountname", false);
         pubkeys = "";
-        let privkeys;
         ecc.PrivateKey.randomKey().then(res=>{
             toggleHide(".create-box", true); 
             let lekey = res.toWif();
@@ -12743,8 +12743,24 @@ $("#createacct").on('click', function() {
 
 $("#generate-but").on("click", function(){
 	toggleHide(".create-box", false);
-	$.post('/createaccount', {pubkey: pubkeys, name: newAccountName}, function(res, res, status){
-		console.log(res);
+	$.post('/createaccount', {pubkey: pubkeys, name: newAccountName}, function(res){
+        console.log('res: ', res);
+
+        // Without JSON.parse(), cannot access the JSON's keys!
+        //res = JSON.parse(res);
+        if (res.status !== 'success') {
+            // Without JSON.parse(), it never work!
+            let errObj = JSON.parse(res.data);
+            let errMsg = errObj.error.name;
+            $("#error-accountname").text(errMsg, true);
+            toggleHide("#error-accountname", true);
+        }
+        else {
+            let accountMsg = 'Newly-created account with private key: \n' + privkeys;
+            $("#error-accountname").text(accountMsg, true);
+            $("#error-accountname").css('color', 'blue');
+            toggleHide("#error-accountname", true);
+        }
 	});
 });
 

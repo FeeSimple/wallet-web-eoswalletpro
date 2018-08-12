@@ -230,12 +230,20 @@ httpsApp.post('/createaccount', function(req, res, status) {
     });
 	})
 	.then(result=>{
-		res.send(result);
+		res.send({
+			status: 'success',
+			data: result
+		});
 		res.end();
+		console.log('createaccount - res: ', result);
 	})
 	.catch(err=>{
-		res.send(err); 
+		res.send({
+			status: 'error',
+			data: err
+		});
 		res.end();
+		console.log('createaccount - err: ', err);
 	});
 });
 
