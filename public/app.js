@@ -12716,10 +12716,10 @@ $("#createacct").on('click', function() {
     // Regex for validating the account name
     // "XRegExp" is exported in the included <script>
     // <script src="https://unpkg.com/xregexp/xregexp-all.js"></script>
-    const accountRegex = XRegExp.build("^[a-z1-4]*$");
+    const accountRegex = XRegExp.build("^[a-z1-5]*$");
     if (newAccountName.length !== 12 ||
         !accountRegex.test(newAccountName)) {
-        let errMsg = 'Invalid account name (must be 12 symbols long and include symbols a-z 1-4)'
+        let errMsg = 'Invalid account name (must be 12 symbols long and include symbols a-z 1-5)'
         $("#error-accountname").text(errMsg, true);
         toggleHide("#error-accountname", true);
     }
@@ -12754,10 +12754,10 @@ $("#faucetrequest").on('click', function() {
     // Regex for validating the account name
     // "XRegExp" is exported in the included <script>
     // <script src="https://unpkg.com/xregexp/xregexp-all.js"></script>
-    const accountRegex = XRegExp.build("^[a-z1-4]*$");
+    const accountRegex = XRegExp.build("^[a-z1-5]*$");
     if (faucetAccountName.length !== 12 ||
         !accountRegex.test(faucetAccountName)) {
-        let errMsg = 'Invalid account name (must be 12 symbols long and include symbols a-z 1-4)'
+        let errMsg = 'Invalid account name (must be 12 symbols long and include symbols a-z 1-5)'
         $("#error-faucet").text(errMsg, true);
         toggleHide("#error-faucet", true);
     }
