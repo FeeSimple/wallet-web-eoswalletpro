@@ -257,6 +257,7 @@ httpsApp.post('/createaccount', function(req, res, status) {
 httpsApp.post('/transaction', function(req, res, status) {
 	let params = req.body;
 	let memo = params.memo;
+  const accountNotExistErr = 'Account does not exist';
 	eos.getAccount(params.to).then(result1=>{
 		if (params.memo && memo.length < 200) {
 			memo = params.memo;
@@ -280,13 +281,13 @@ httpsApp.post('/transaction', function(req, res, status) {
 					res.send({e: "Your account has exceeded its assigned CPU limit. Please try again later."});
 					res.end();
 				}
-			}).catch(err=>{res.send({e: "The account you are trying to send from does not exit"}); res.end();})
+			}).catch(err=>{res.send({e: accountNotExistErr}); res.end();})
 
 		} else {
-			res.send({e: "Error - The account you are trying to send to does not exit"});
+			res.send({e: accountNotExistErr});
 			res.end();
 		}
-	}).catch(err=>{res.send({e: "The account you are trying to send to does not exit"}); res.end();});
+	}).catch(err=>{res.send({e: accountNotExistErr}); res.end();});
 });
 
 //----------------------- CREATE RAW EOS TRANSACTION ------------------------//

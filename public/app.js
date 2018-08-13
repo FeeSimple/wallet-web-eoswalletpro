@@ -12766,16 +12766,15 @@ $("#faucetrequest").on('click', function() {
         $.post('/transaction', {from: faucetControl.adminAccount, 
             to: faucetAccountName, amount: faucetControl.amount}, 
             function(data, status) {
-			//signs serialized tx
-			let bufferOriginal = Buffer.from(JSON.parse(data.buf).data);
-			let packedTr = data.packedTr;
-			console.log(packedTr);
-			// let sig = []
-			// sig.push(ecc.sign(bufferOriginal, faucetControl.adminPrivKey));
-            // console.log(sig);
-            let sig = ecc.sign(bufferOriginal, faucetControl.adminPrivKey);
-
 			if (!data.e) {
+        //signs serialized tx
+        let bufferOriginal = Buffer.from(JSON.parse(data.buf).data);
+        let packedTr = data.packedTr;
+        console.log(packedTr);
+        // let sig = []
+        // sig.push(ecc.sign(bufferOriginal, faucetControl.adminPrivKey));
+        // console.log(sig);
+        let sig = ecc.sign(bufferOriginal, faucetControl.adminPrivKey);
 				//sends sig back to server
 				$.post('/pushtransaction', {sigs: sig, packedTr: packedTr}, function(data, status){
 					console.log(data);
@@ -12787,9 +12786,10 @@ $("#faucetrequest").on('click', function() {
                     toggleHide("#link-faucet", true);
 					//setTimeout(function(){toggleHide("#success", false); getInfo(account);}, 4000);
 				});
-			} else {
-                toggleHide("#link-faucet", false);
-				$("#error-faucet").text("Error: ", data.e);
+			} 
+      else {
+        toggleHide("#link-faucet", false);
+				$("#error-faucet").text("Error: " + data.e);
 				toggleHide("#error-faucet", true);
 			}
         })
