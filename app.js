@@ -142,8 +142,10 @@ httpsApp.post('/pubtoacct', function(req, res){
 	eos.getAccount(req.body.account_target).then(result=>{
 		let ram_quota = result.ram_quota;
 		let ram_usage = result.ram_usage;
-		let bandwidth = result.delegated_bandwidth;
-		let cpu_limit = result.cpu_limit.available; 
+		//let bandwidth = result.delegated_bandwidth;
+    let netLimit = result.net_limit;
+		let bandwidth = 'used: ' + netLimit.used + ', available: ' + netLimit.available + ', max: ' + netLimit.max;
+    let cpu_limit = result.cpu_limit.available; 
 		let created = result.created;
 		let account = result.account_name;
 		let requiredkey = result.permissions[0].required_auth.keys[0].key;
