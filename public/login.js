@@ -93,7 +93,7 @@ $(".4-but").on("click", function(){
 })
 
 $(".explorer").on("click", function(){
-	window.open(`http://eospark.com`,'_blank');
+	window.open(`https://feesimple.io`,'_blank');
 });
 
 
@@ -183,7 +183,7 @@ $("#loginbut").on('click', function() {
 										$("#account-name").text(`Account: ${account_arr[i]}`);
 										getAccountLink = account_arr[i]
 										$("#get-account").on("click", function(){
-											window.open(`http://eospark.com/Jungle/account/${account_arr[i]}`,'_blank');
+											window.open(`https://feesimpletracker.io/accounts/${account_arr[i]}`,'_blank');
 										});
 										getInfo(account_arr[i]);
 										account = account_arr[i];

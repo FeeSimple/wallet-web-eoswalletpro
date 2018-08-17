@@ -12388,7 +12388,7 @@ $("#scatter-unlock").on("click", function() {
               getAccountLink = account_arr[i];
               console.log(identity.accounts[0].name);
               $("#get-account").on("click", function(){
-                  window.open(`http://eospark.com/MainNet/account/${account_arr[i].name}`,'_blank');
+                  window.open(`https://feesimpletracker.io/accounts/${account_arr[i].name}`,'_blank');
               });
 							console.log(account_arr[i].name);
 							getInfo(account_arr[i].name);
@@ -12460,7 +12460,7 @@ $("#loginbut").on('click', function() {
                                         console.log('account_arr[i]', account_arr[i]);
                                         getAccountLink = account_arr[i]
 										$("#get-account").on("click", function(){
-											window.open(`http://eospark.com/MainNet/account/${account_arr[i]}`,'_blank');
+											window.open(`https://feesimpletracker.io/accounts/${account_arr[i]}`,'_blank');
 										});
 										console.log(account_arr[i]);
 										getInfo(account_arr[i]);
