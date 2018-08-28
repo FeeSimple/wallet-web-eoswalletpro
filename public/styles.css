@@ -223,7 +223,7 @@ html,body {
 	box-shadow: 0px 0px 300px 200px rgba(0,0,0,0.3);
 	position: absolute;
 	left: 50%;
-	top: 170px;
+	top: 70px;
 	transform: translate(-50%);
 	height: 500px;
 	width: 800px;
@@ -428,10 +428,17 @@ html,body {
 	transform: translate(-50%);
 }
 
-.manageram-tit {
+.buyram-tit {
 	position: absolute;
-	left: 12%;
+	left: 13%;
 	top: 15px;
+	transform: translate(-50%);
+}
+
+.sellram-tit {
+	position: absolute;
+	left: 13%;
+	top: 270px;
 	transform: translate(-50%);
 }
 
@@ -454,7 +461,7 @@ html,body {
 	left:12%;
 	top: 110px;
 	outline: none;
-	width: 400px;
+	width: 170px;
 	height: 38px;
 	border-radius: 3px;
 	border:2px solid grey;
@@ -464,10 +471,36 @@ html,body {
 .ram-payer {
 	box-shadow: 16px 28px 74px 0px rgba(0,0,0,0.25);
 	position: absolute;
-	left:12%;
+	left:40%;
+	top: 110px;
+	outline: none;
+	width: 170px;
+	height: 38px;
+	border-radius: 3px;
+	border:2px solid grey;
+	text-indent: 12px;
+}
+
+.ram-buy-amount {
+	box-shadow: 16px 28px 74px 0px rgba(0,0,0,0.25);
+	position: absolute;
+	left:68%;
+	top: 110px;
+	outline: none;
+	width: 170px;
+	height: 38px;
+	border-radius: 3px;
+	border:2px solid grey;
+	text-indent: 12px;
+}
+
+.ram-buy-unit {
+	box-shadow: 16px 28px 74px 0px rgba(0,0,0,0.25);
+	position: absolute;
+	left:50%;
 	top: 160px;
 	outline: none;
-	width: 400px;
+	width: 170px;
 	height: 38px;
 	border-radius: 3px;
 	border:2px solid grey;
@@ -477,9 +510,50 @@ html,body {
 .buyram-but {
 	position: absolute;
 	left: 12%;
-	top: 210px;
+	top: 160px;
 	height: 38px;
-	width: 230px;
+	width: 100px;
+	background-color:#00DF80;
+	color: white;
+	border-radius: 7px;
+	border-color: #00DF80;
+	outline: none;
+	font-size: 2px;
+	box-shadow: 16px 28px 74px 0px rgba(0,0,0,0.25);
+}
+
+.ram-seller {
+	box-shadow: 16px 28px 74px 0px rgba(0,0,0,0.25);
+	position: absolute;
+	left:12%;
+	top: 370px;
+	outline: none;
+	width: 170px;
+	height: 38px;
+	border-radius: 3px;
+	border:2px solid grey;
+	text-indent: 12px;
+}
+
+.ram-sell-amount {
+	box-shadow: 16px 28px 74px 0px rgba(0,0,0,0.25);
+	position: absolute;
+	left:40%;
+	top: 370px;
+	outline: none;
+	width: 170px;
+	height: 38px;
+	border-radius: 3px;
+	border:2px solid grey;
+	text-indent: 12px;
+}
+
+.sellram-but {
+	position: absolute;
+	left: 12%;
+	top: 420px;
+	height: 38px;
+	width: 100px;
 	background-color:#00DF80;
 	color: white;
 	border-radius: 7px;
