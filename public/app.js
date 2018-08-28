@@ -12511,7 +12511,7 @@ $("#lookup-account").on("click", function(){
 });
 
 $("#manage-ram").on("click", function(){
-	toggleHide(".lookup-box", true);
+	toggleHide(".manageram-box", true);
 });
 
 let count = 0;

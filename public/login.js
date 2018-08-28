@@ -211,6 +211,10 @@ $("#lookup-account").on("click", function(){
 	toggleHide(".lookup-box", true);
 });
 
+$("#manage-ram").on("click", function(){
+	toggleHide(".manageram-box", true);
+});
+
 let count = 0;
 let eosBalance;
 
