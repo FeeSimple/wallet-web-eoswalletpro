@@ -75,6 +75,16 @@
 		<button id="lookup-done" class="button-green">Done</button>
 	</div>
 
+  <div class="manageram-box hide">
+		<h1 class="manageram-tit">Buy RAM</h1>
+		<form id="lookup-form">
+			<input type="text" placeholder="Receiver" class="ram-receiver">
+      <input type="text" placeholder="Payer" class="ram-payer">
+			<input type="button" value="BUY" class="buyram-but button-green">
+		</form>
+		<button id="lookup-done" class="button-green">Done</button>
+	</div>
+
 	<div class="welcome-box hide">
 		<h1 class="lookup-tit">Welcome!</h1>
 		<div id="x-box">
@@ -201,8 +211,8 @@
 			<h1 class="block-tit">Last block: #<%= lastBlock%></h1>
 			<div class="block-i">
 				<button class="button-blue blocks center" id="get-account">View Account History</button>
-				<button class="button-green blocks center" id="buy-eos">Lookup Account</button>
-				<button class="button-green blocks center" id="buy-token" onclick="window.open('https://www.binance.com/tradeDetail.html?symbol=EOS_USDT','_blank');">Purchase XFS</button>
+				<button class="button-green blocks center" id="lookup-account">Lookup Account</button>
+				<button class="button-green blocks center" id="manage-ram">Manage RAM</button>
 				<button class="button-green blocks center" id="buy-tokens">Purchase Tokens</button>
 			</div>
 		</div>

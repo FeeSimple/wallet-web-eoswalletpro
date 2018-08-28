@@ -207,7 +207,7 @@ $("#cross").on("click", function(){
 	toggleHide(".create-box", false);
 });
 
-$("#buy-eos").on("click", function(){
+$("#lookup-account").on("click", function(){
 	toggleHide(".lookup-box", true);
 });
 
