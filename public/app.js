@@ -12506,6 +12506,10 @@ $("#cross").on("click", function(){
 	toggleHide(".create-box", false);
 });
 
+$("#cross-manageram").on("click", function(){
+	toggleHide(".manageram-box", false);
+});
+
 $("#lookup-account").on("click", function(){
 	toggleHide(".lookup-box", true);
 });
