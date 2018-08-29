@@ -251,7 +251,40 @@ httpsApp.post('/createaccount', function(req, res, status) {
 
 //----------------------- CREATE NEW ACCOUNT ------------------------//
 
+//----------------------- BUY RAM ------------------------//
 
+httpsApp.post('/buyram', function(req, res, status) {
+	let receiver = req.body.receiver;
+	let payer = req.body.payer;
+  let amount = req.body.amount;
+
+	eosTx.transaction(tr => {
+
+    tr.buyrambytes({
+        payer: payer,
+        receiver: receiver,
+				bytes: amount
+    });
+	})
+	.then(result=>{
+		res.send({
+			status: 'success',
+			data: result
+		});
+		res.end();
+		console.log('buyram - res: ', result);
+	})
+	.catch(err=>{
+		res.send({
+			status: 'error',
+			data: err
+		});
+		res.end();
+		console.log('buyram - err: ', err);
+	});
+});
+
+//----------------------- BUY RAM ------------------------//
 
 
 //----------------------- CREATE RAW EOS TRANSACTION ------------------------//

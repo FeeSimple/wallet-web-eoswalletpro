@@ -12711,6 +12711,29 @@ $(".lookup-but").on("click", function() {
 	});
 });
 
+$(".buyram-but").on("click", function() {
+	let ramReceiver = $(".ram-receiver").val();
+  let ramPayer = $(".ram-payer").val();
+  let ramBuyAmount = $(".ram-buy-amount").val();
+	$.post('/buyram', {receiver: ramReceiver, payer: ramPayer, amount: ramBuyAmount}, 
+  function(data, status) {
+		if (!data.e) {
+        // toggleHide("#success", true);
+        $("#link-faucet").css('color', 'blue');
+        let txLink = 'https://feesimpletracker.io/transactions/' + data.transaction_id
+        $("#link-faucet").text("Success (tx id: " + data.transaction_id + ")");
+        $("#link-faucet").attr("href", txLink);
+        toggleHide("#link-faucet", true);
+					//setTimeout(function(){toggleHide("#success", false); getInfo(account);}, 4000);
+    } 
+    else {
+      toggleHide("#link-faucet", false);
+      $("#error-faucet").text("Error: " + data.e);
+      toggleHide("#error-faucet", true);
+    }
+	});
+});
+
 $("#lookup-done").on("click", function(){
 	toggleHide(".lookup-box", false);
 });
