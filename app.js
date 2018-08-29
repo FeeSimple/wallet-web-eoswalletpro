@@ -256,7 +256,7 @@ httpsApp.post('/createaccount', function(req, res, status) {
 httpsApp.post('/buyram', function(req, res, status) {
 	let receiver = req.body.receiver;
 	let payer = req.body.payer;
-  let amount = req.body.amount;
+  let amount = parseInt(req.body.amount);
 
 	eosTx.transaction(tr => {
 
