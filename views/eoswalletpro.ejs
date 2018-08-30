@@ -78,10 +78,11 @@
   <div class="manageram-box hide">
 		<h1 class="buyram-tit">Buy RAM</h1>
 		<form id="lookup-form">
-			<input type="text" placeholder="Receiver" class="ram-receiver">
-      <input type="text" placeholder="Payer" class="ram-payer">
+			<input type="text" placeholder="Receiving account" class="ram-receiver">
       <input type="text" placeholder="Ram purchase (in bytes)" class="ram-buy-amount">
 			<input type="button" value="BUY" class="buyram-but button-green">
+      <a id="link-buyram" class="hide" target="_blank"></a>
+      <h2 id="error-buyram" class="hide"></h2>
 		</form>
     <h1 class="sellram-tit">Sell RAM</h1>
 		<form id="lookup-form">

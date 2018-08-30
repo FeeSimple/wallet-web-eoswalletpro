@@ -12711,25 +12711,56 @@ $(".lookup-but").on("click", function() {
 	});
 });
 
+function buyRamError(errMsg) {
+  toggleHide("#link-buyram", false);
+  $("#error-buyram").text(errMsg);
+  toggleHide("#error-buyram", true);
+}
+
 $(".buyram-but").on("click", function() {
 	let ramReceiver = $(".ram-receiver").val();
-  let ramPayer = $(".ram-payer").val();
+  // let ramPayer = $(".ram-payer").val();
   let ramBuyAmount = $(".ram-buy-amount").val();
-	$.post('/buyram', {receiver: ramReceiver, payer: ramPayer, amount: ramBuyAmount}, 
-  function(data, status) {
-		if (!data.e) {
-        // toggleHide("#success", true);
-        $("#link-faucet").css('color', 'blue');
-        let txLink = 'https://feesimpletracker.io/transactions/' + data.transaction_id
-        $("#link-faucet").text("Success (tx id: " + data.transaction_id + ")");
-        $("#link-faucet").attr("href", txLink);
-        toggleHide("#link-faucet", true);
-					//setTimeout(function(){toggleHide("#success", false); getInfo(account);}, 4000);
-    } 
+  
+  if (ramBuyAmount <= 10) {
+    buyRamError("RAM buy amount must be above 10 bytes");
+    return;
+  }
+
+  if (ramReceiver === "") {
+    buyRamError("Please enter some account to receive RAM (either your own or another account)");
+    return;
+  }
+
+  // Check if account exists
+  $.post('/lookupacct', {targetAcct: ramReceiver}, function(res) {
+		console.log('lookupacct: ', res);
+    if (res.status === 500) {
+      buyRamError("Account does not exist");
+      return;
+    }
     else {
-      toggleHide("#link-faucet", false);
-      $("#error-faucet").text("Error: " + data.e);
-      toggleHide("#error-faucet", true);
+      // Payer is always the current account
+      $.post('/buyram', {receiver: ramReceiver, payer: account, amount: ramBuyAmount}, 
+      function(res) {
+        console.log('buyram: ', res);
+        let txData = res.data;
+        if (res.status === 'success') {
+            toggleHide("#error-buyram", false);
+            console.log('buyram - tx: ', txData.transaction_id);
+            $("#link-buyram").css('color', 'blue');
+            let txLink = 'https://feesimpletracker.io/transactions/' + txData.transaction_id
+            $("#link-buyram").text("Success (tx id: " + txData.transaction_id + ")");
+            $("#link-buyram").attr("href", txLink);
+            toggleHide("#link-buyram", true);
+              //setTimeout(function(){toggleHide("#success", false); getInfo(account);}, 4000);
+        } 
+        else {
+          txData = JSON.parse(txData);
+          let errMsg = "Error: " + txData.message + " (" + txData.error.what + ")";
+          buyRamError(errMsg);
+        }
+	});
     }
 	});
 });

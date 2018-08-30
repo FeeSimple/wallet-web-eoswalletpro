@@ -128,7 +128,7 @@ httpsApp.post('/lookupacct', function(req, res, status){
 		let keyreturn = result.permissions[0].required_auth.keys[0].key;
 		res.send({account: account, created: created, ram: ram, bandwidth: bandwidth, pubkey: keyreturn});
 		res.end();
-	}).catch(err=>{res.send(err); res.end();});
+	}).catch(err=>{res.send(err); res.end(); console.log('lookupacct error: ', err);});
 });
 
 httpsApp.post('/getbalance', function (req, res){
