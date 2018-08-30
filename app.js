@@ -119,12 +119,33 @@ httpsApp.post('/getkeyaccount', function(req, res, status){
 	});
 });
 
+function beautifyRam(ramAmount) {
+  let ram = ramAmount;
+  if (ram >= 1024) {
+    ram = new Intl.NumberFormat().format(ram/1024);
+    ram = ram.toString() + " KB";
+  }
+  else {
+    ram = new Intl.NumberFormat().format(ram);
+    ram = ram.toString() + " Byte";
+  }
+  return ram;
+}
+
+function beautifyBandwidth(netLimit) {
+  let bandwidth = 'used ' + beautifyRam(netLimit.used);
+  bandwidth += ', available ' + beautifyRam(netLimit.available);
+  bandwidth += ', max ' + beautifyRam(netLimit.max);
+  return bandwidth;
+}
+
 httpsApp.post('/lookupacct', function(req, res, status){
 	eos.getAccount(req.body.targetAcct).then(result=>{
 		let account = req.body.targetAcct;
 		let created = result.created;
-		let ram = result.ram_quota;
-		let bandwidth = result.delegated_bandwidth;
+		let ram = beautifyRam(result.ram_quota);
+    let bandwidth = beautifyBandwidth(result.net_limit);
+    console.log('lookupacct - ram: ', ram, ', bandwidth: ', bandwidth);
 		let keyreturn = result.permissions[0].required_auth.keys[0].key;
 		res.send({account: account, created: created, ram: ram, bandwidth: bandwidth, pubkey: keyreturn});
 		res.end();
@@ -140,12 +161,12 @@ httpsApp.post('/getbalance', function (req, res){
 
 httpsApp.post('/pubtoacct', function(req, res){
 	eos.getAccount(req.body.account_target).then(result=>{
-		let ram_quota = result.ram_quota;
-		let ram_usage = result.ram_usage;
+    // let ram_quota = new Intl.NumberFormat().format(result.ram_quota);
+    let ram_quota = beautifyRam(result.ram_quota);
+		let ram_usage = beautifyRam(result.ram_usage);
 		//let bandwidth = result.delegated_bandwidth;
-    let netLimit = result.net_limit;
-		let bandwidth = 'used: ' + netLimit.used + ', available: ' + netLimit.available + ', max: ' + netLimit.max;
-    let cpu_limit = result.cpu_limit.available; 
+    let bandwidth = beautifyBandwidth(result.net_limit);
+    let cpu_limit = new Intl.NumberFormat().format(result.cpu_limit.available) + ' µs'; 
 		let created = result.created;
 		let account = result.account_name;
 		let requiredkey = result.permissions[0].required_auth.keys[0].key;
