@@ -12842,7 +12842,7 @@ $("#faucetrequest").on('click', function() {
 					console.log(data);
                     toggleHide("#success", true);
                     $("#link-faucet").css('color', 'blue');
-                    let txLink = 'https://feesimpletracker.io/transactions/' + data.transaction_id
+                    let txLink = 'https://feesimpletracker.io/search?q=' + data.transaction_id
                     $("#link-faucet").text(faucetControl.amount + " sent (tx id: " + data.transaction_id + ")");
                     $("#link-faucet").attr("href", txLink);
                     toggleHide("#link-faucet", true);
