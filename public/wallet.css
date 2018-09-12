@@ -128,7 +128,7 @@ html,body {padding:0; margin:0;}
 	left: 10%;
 	top: 180px;
 	width: 50%;
-	height: 385px;
+	height: 400px;
 }
 
 #selector {
@@ -279,6 +279,20 @@ html,body {padding:0; margin:0;}
 	position: absolute;
 	left: 10%;
 	font-weight: 300;
+}
+
+#link-transfer {
+  top: 360px;
+	font-size: 12px;
+	color: #0072FF;
+	font-weight: 50;
+}
+
+#error-transfer {
+	top: 360px;
+	font-size: 12px;
+	color: #FF004E;
+	font-weight: 50;
 }
 
 #tx-id {

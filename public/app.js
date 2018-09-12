@@ -12557,126 +12557,105 @@ function getInfo(account_t) {
 
 let isValid = true;
 
+function notifyErrorTransfer(error) {
+  $("#error-transfer").text(error, true);
+  toggleHide("#error-transfer", true);
+}
+
+function notifyLinkTransfer(transaction_id) {
+  $("#link-transfer").css('color', 'blue');
+  let txLink = 'https://feesimpletracker.io/search?q=' + transaction_id
+  $("#link-transfer").text("Success " + "(tx id: " + transaction_id + ")");
+  $("#link-transfer").attr("href", txLink);
+  toggleHide("#link-transfer", true);
+}
+
+function handlePushTx(data) {
+  // If success
+  if (!data.e) {
+    notifyLinkTransfer(data.transaction_id)
+  } else {
+    notifyErrorTransfer(data.e);
+  }
+}
+
 $("#send-but").on("click", function() {
-	if (scatterUnlocked) {
-		if (isValid) {
-		isValid = false;
-		let _token = $("#selector").val()
-		let _to = $('#to').val();
-		let _amountInput = $('#amount').val();
-		let _amountCheck = $(`.${_token}`);
-		let stringNum = _amountCheck.text();
-		console.log(stringNum);
-		let checkNumArr = stringNum.split(" ");
-		console.log(checkNumArr);
-		let _amountAgainst = Number(checkNumArr[0]);
+      toggleHide("#link-transfer", false);
+      toggleHide("#error-transfer", false);
 
-		console.log(_amountAgainst);
+      let _to = $('#to').val();
+      const accountRegex = XRegExp.build("^[a-z1-5]*$");
+      if (_to.length !== 12 ||
+        !accountRegex.test(_to)) {
+        let errMsg = 'Invalid account name (must be 12 symbols long and include symbols a-z 1-5)'
+        notifyErrorTransfer(errMsg)
+        return;
+      }
 
-		//if (_amountInput <= _amountAgainst) {
+      let _amountInput = $('#amount').val();
+      if (_amountInput <= 0) {
+        let errMsg = 'Invalid amount'
+        notifyErrorTransfer(errMsg)
+        return;
+      }
 
-		let _amount = $('#amount').val() + " " + _token;
-		let _memo = $("#memo").val();
-		console.log(_amount);
-		console.log(account);
-		$.post('/transaction', {from: account, to: _to, amount: _amount, memo: _memo, pubkeys: pub}, function(data, status) {
-			//signs serialized tx
-			let bufferOriginal = Buffer.from(JSON.parse(data.buf).data);
-			let packedTr = data.packedTr;
-			console.log(packedTr);
-			//let sig = []
-			//sig.push(ecc.sign(bufferOriginal, priv));
-			//console.log(sig);
+      let _token = $("#selector").val()
+      let _amountCheck = $(`.${_token}`);
+      let stringNum = _amountCheck.text();
+      console.log(stringNum);
+      let checkNumArr = stringNum.split(" ");
+      console.log(checkNumArr);
+      let _amountAgainst = Number(checkNumArr[0]);
 
-			if (!data.e) {
-				console.log(pub);
-				scatter.getArbitrarySignature(
-					pub, 
-					bufferOriginal, 
-					whatfor = `Transaction --- From: ${account} --- To: ${_to} --- Amount: ${_amount}`, 
-					isHash = false
-				).then(result3=>{
+      console.log(_amountAgainst);
 
-					$.post('/pushtransaction', {sigs: result3, packedTr: packedTr}, function(data, status){
-						console.log(data);
-						toggleHide("#success", true);
-						$("#tx-id").text("Transaction Id: " + data.transaction_id);
-						setTimeout(function(){isValid=true;}, 1000);
-						setTimeout(function(){toggleHide("#success", false); getInfo(account);}, 4000);
-					});
+      let _amount = $('#amount').val() + " " + _token;
+      let _memo = $("#memo").val();
+      
+      $.post('/transaction', {from: account, to: _to, amount: _amount, memo: _memo, pubkeys: pub}, 
+      function(data, status) {
+        console.log('/transaction - data: ', data, ', status: ', status);
+        if (!data.e) {
+          //signs serialized tx
+          let bufferOriginal = Buffer.from(JSON.parse(data.buf).data);
+          let packedTr = data.packedTr;
+          console.log(packedTr);
+          console.log(pub);
+          // Login with Scatter
+          if (scatterUnlocked) {
+            scatter.getArbitrarySignature(
+              pub, 
+              bufferOriginal, 
+              whatfor = `Transaction --- From: ${account} --- To: ${_to} --- Amount: ${_amount}`, 
+              isHash = false
+            ).then(result3=>{
+
+              $.post('/pushtransaction', {sigs: result3, packedTr: packedTr}, 
+                function(data){
+                  console.log(data);
+                  handlePushTx(data);
+                });
 
 
-					console.log(result3)
+              console.log(result3)
 
-				});
+            });
+          }
+          else { // login with private key
+            let sig = []
+            sig.push(ecc.sign(bufferOriginal, priv));
+            console.log(sig);
 
-				//sends sig back to server
-
-			} else {
-				$("#error-tx").text("Error - The account you are trying to send to does not exist");
-				toggleHide("#error-tx", true);
-			}
-		})
-		
-	
-	//} else {
-		//console.log("NEED TIMER");
-	//}
-			
-		}
-	} else {
-
-	if (isValid) {
-		isValid = false;
-		let _token = $("#selector").val()
-		let _to = $('#to').val();
-		let _memo = $("#memo").val();
-		let _amountInput = $('#amount').val();
-		let _amountCheck = $(`.${_token}`);
-		let stringNum = _amountCheck.text();
-		console.log(stringNum);
-		let checkNumArr = stringNum.split(" ");
-		console.log(checkNumArr);
-		let _amountAgainst = Number(checkNumArr[0]);
-
-		console.log(_amountAgainst);
-
-		//if (_amountInput <= _amountAgainst) {
-
-		let _amount = $('#amount').val() + " " + _token;
-		console.log(_amount);
-		console.log(account);
-		$.post('/transaction', {from: account, to: _to, amount: _amount, memo: _memo, pubkeys: pub}, function(data, status) {
-			//signs serialized tx
-			let bufferOriginal = Buffer.from(JSON.parse(data.buf).data);
-			let packedTr = data.packedTr;
-			console.log(packedTr);
-			let sig = []
-			sig.push(ecc.sign(bufferOriginal, priv));
-			console.log(sig);
-
-			if (!data.e) {
-				//sends sig back to server
-				$.post('/pushtransaction', {sigs: ecc.sign(bufferOriginal, priv), packedTr: packedTr}, function(data, status){
-					console.log(data);
-					toggleHide("#success", true);
-					$("#tx-id").text("Transaction Id: " + data.transaction_id);
-					setTimeout(function(){toggleHide("#success", false); getInfo(account);}, 4000);
-				});
-			} else {
-				$("#error-tx").text("Error - The account you are trying to send to does not exist");
-				toggleHide("#error-tx", true);
-			}
-		})
-		setTimeout(function(){isValid=true;}, 1000);
-	//} else {
-		//console.log("NEED TIMER");
-	//}
-			
-		}
-
-	}
-
+            $.post('/pushtransaction', {sigs: ecc.sign(bufferOriginal, priv), packedTr: packedTr}, 
+              function(data, status){
+                console.log(data);
+                handlePushTx(data);
+              });
+          }
+        } else {
+          notifyErrorTransfer(data.e);
+        }
+      })
 });
 
 $("#send-all").on("click", function(){
