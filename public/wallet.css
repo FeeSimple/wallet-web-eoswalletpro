@@ -285,14 +285,12 @@ html,body {padding:0; margin:0;}
   top: 360px;
 	font-size: 12px;
 	color: #0072FF;
-	font-weight: 50;
 }
 
 #error-transfer {
 	top: 360px;
 	font-size: 12px;
 	color: #FF004E;
-	font-weight: 50;
 }
 
 #tx-id {
