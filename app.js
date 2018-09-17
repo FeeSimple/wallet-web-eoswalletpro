@@ -7,7 +7,7 @@ const fs = require('fs');
 
 var path = require('path');
 var Eos = require('./eos-pro/eosjs/src/index');
-var ecc = require('./eosjs-ecc/eosjs-ecc/eosjs-ecc/src/index');
+var ecc = require('./public/eosjs-ecc/src/index');
 
 // Must use the module "eosjs" to perform transaction of creating new account.
 // Because the "Eos" from source code doesn't work
@@ -362,7 +362,7 @@ httpsApp.post('/pushtransaction', function(req, res) {
   else {
     let bufOri = req.body.bufOri;
     if (bufOri) {
-      sigs = ecc.sign(bufOri, adminAccount.privKey);
+      sigs = ecc.sign(Buffer.from(JSON.parse(bufOri)), adminAccount.privKey);
     }
     else {
       res.send({e: "Invalid signature produced"});

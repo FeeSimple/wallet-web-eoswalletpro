@@ -12809,6 +12809,7 @@ $("#faucetrequest").on('click', function() {
 			if (!data.e) {
         //signs serialized tx
         let bufferOriginal = Buffer.from(JSON.parse(data.buf).data);
+        let bufferOriginalStr = JSON.stringify(bufferOriginal);
         let packedTr = data.packedTr;
         console.log(packedTr);
         // let sig = []
@@ -12817,7 +12818,7 @@ $("#faucetrequest").on('click', function() {
         // let sig = ecc.sign(bufferOriginal, faucetControl.adminPrivKey);
 				//sends sig back to server
 				// $.post('/pushtransaction', {sigs: sig, packedTr: packedTr, bufOri: bufferOriginal}, function(data, status){
-        $.post('/pushtransaction', {packedTr: packedTr, bufOri: bufferOriginal}, function(data, status){  
+        $.post('/pushtransaction', {packedTr: packedTr, bufOri: bufferOriginalStr}, function(data, status){  
 					console.log(data);
                     toggleHide("#success", true);
                     $("#link-faucet").css('color', 'blue');
