@@ -12782,8 +12782,7 @@ $("#createacct").on('click', function() {
 });
 
 const faucetControl = {
-    'adminAccount': 'usertrung123',
-    'adminPrivKey': '5K6LU8aVpBq9vJsnpCvaHCcyYwzPPKXfDdyefYyAMMs3Qy42fUr',
+    'adminAccount': 'useraaaaaaah',
     'amount': '5 XFS'
 };
 
@@ -12815,9 +12814,10 @@ $("#faucetrequest").on('click', function() {
         // let sig = []
         // sig.push(ecc.sign(bufferOriginal, faucetControl.adminPrivKey));
         // console.log(sig);
-        let sig = ecc.sign(bufferOriginal, faucetControl.adminPrivKey);
+        // let sig = ecc.sign(bufferOriginal, faucetControl.adminPrivKey);
 				//sends sig back to server
-				$.post('/pushtransaction', {sigs: sig, packedTr: packedTr}, function(data, status){
+				// $.post('/pushtransaction', {sigs: sig, packedTr: packedTr, bufOri: bufferOriginal}, function(data, status){
+        $.post('/pushtransaction', {packedTr: packedTr, bufOri: bufferOriginal}, function(data, status){  
 					console.log(data);
                     toggleHide("#success", true);
                     $("#link-faucet").css('color', 'blue');

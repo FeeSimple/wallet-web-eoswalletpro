@@ -7,14 +7,16 @@ const fs = require('fs');
 
 var path = require('path');
 var Eos = require('./eos-pro/eosjs/src/index');
+var ecc = require('./eosjs-ecc/eosjs-ecc/eosjs-ecc/src/index');
 
 // Must use the module "eosjs" to perform transaction of creating new account.
 // Because the "Eos" from source code doesn't work
 var EosTx = require('eosjs');
 
+require('dotenv').config();
 const adminAccount = {
-	name: 'usertrung123',
-	privKey: '5K6LU8aVpBq9vJsnpCvaHCcyYwzPPKXfDdyefYyAMMs3Qy42fUr'
+	name: process.env.ADMIN_ACCOUNT_NAME,
+	privKey: process.env.ADMIN_ACCOUNT_PRIV
 }
 
 // Basic configuration of the EOS client
@@ -353,28 +355,38 @@ httpsApp.post('/transaction', function(req, res, status) {
 //----------------------- PUSH SIGNED TRANSACTION ------------------------//
 
 httpsApp.post('/pushtransaction', function(req, res) {
-	if (req.body.sigs) {
-		let sigver = Eos.modules.ecc.Signature.from(req.body.sigs).toString();
-		let lasig = [sigver];
-		let transi = JSON.parse(req.body.packedTr);
-
-		let package = {
-			compression: 'none',
-			transaction: transi,
-			signatures: lasig
-		}
-		//Pushes tx in correct format
-		eos.pushTransaction(package).then(result=>{
-			res.send(result);
-			res.end();
-		}).catch(err => {
-			res.send({e: "Either, you have exceeded your accounts balance, entered the wrong private key, or something else went wrong"});
-			res.end();
-		});
-	} else {
-		res.send({e: "Invalid signature produced"});
-		res.end();
+	let sigs;
+  if (req.body.sigs) {
+    sigs = req.body.sigs;
+  } 
+  else {
+    let bufOri = req.body.bufOri;
+    if (bufOri) {
+      sigs = ecc.sign(bufOri, adminAccount.privKey);
+    }
+    else {
+      res.send({e: "Invalid signature produced"});
+      res.end();
+    }
 	}
+
+  let sigver = Eos.modules.ecc.Signature.from(sigs).toString();
+  let lasig = [sigver];
+  let transi = JSON.parse(req.body.packedTr);
+
+  let package = {
+    compression: 'none',
+    transaction: transi,
+    signatures: lasig
+  }
+  //Pushes tx in correct format
+  eos.pushTransaction(package).then(result=>{
+    res.send(result);
+    res.end();
+  }).catch(err => {
+    res.send({e: "Either, you have exceeded your accounts balance, entered the wrong private key, or something else went wrong"});
+    res.end();
+  });
 })
 
 //----------------------- PUSH SIGNED TRANSACTION ------------------------//
