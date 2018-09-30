@@ -155,7 +155,7 @@ function beautifyRam(ramAmount) {
 
 // Applicable for RAM and Bandwidth
 function getResourceStr(resource, cpu) {
-  let resourceStr = new Intl.NumberFormat().format(resource.used / resource.max).toString();
+  let resourceStr = new Intl.NumberFormat().format((resource.used/resource.max) * 100).toString();
   resourceStr += ' % ';
   if (cpu) {
     resourceStr += '(' + new Intl.NumberFormat().format(resource.used).toString() + ' µs';
