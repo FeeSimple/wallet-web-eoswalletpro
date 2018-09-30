@@ -11,7 +11,7 @@
 		<div id="account-details" class="center box">
 			<h1 id="account-name" class="account-names">EOSIO</h1>
 			<h1 id="balance-head" class="account-names">Balance: 90 EOS : $400.34</h1>
-			<h1 id="ram-head" class="account-names">Ram: 99283</h1>
+			<!-- <h1 id="ram-head" class="account-names">Ram: 99283</h1> -->
 			<button id="qr-but" class="account-names button-blue">QR Address</button>
 		</div>
 
@@ -45,11 +45,18 @@
 			<h1 id="account-deet-title">Your Account Details</h1>
 			<div id="further-deets">
 				<h1 id="account-balance" class="account-subs">Balance: 82309 EOS</h1>
-				<h1 id="cpu-limit" class="account-subs">CPU limit: 1238</h1>
-				<h1 id="ram-usage" class="account-subs">Ram usage: null</h1>
-				<h1 id="ram-quota" class="account-subs">Ram quota: 123908</h1>
-				<h1 id="net-weight" class="account-subs">Net weight: 218930</h1>
-				<h1 id="delegated-bandwidth" class="account-subs">Bandwidth: 128309</h1>
+				<p class="account-subs"> CPU:
+          <meter id="cpu-limit-meter" value="0"></meter>
+          <b id="cpu-limit" class="account-subs"></b>
+        </p>
+        <p class="account-subs"> RAM:
+          <meter id="ram-meter" value="0"></meter>
+          <b id="ram" class="account-subs"></b>
+        </p>
+        <p class="account-subs"> Bandwidth:
+          <meter id="delegated-bandwidth-meter" value="0"></meter>
+          <b id="delegated-bandwidth" class="account-subs"></b>
+        </p>
 			</div>
 		</div>
 		<div id="token-balance-box">

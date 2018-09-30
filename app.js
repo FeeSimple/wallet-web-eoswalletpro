@@ -123,33 +123,71 @@ httpsApp.post('/getkeyaccount', function(req, res, status){
 
 function beautifyRam(ramAmount) {
   let ram = ramAmount;
-  if (ram >= 1024) {
-    ram = new Intl.NumberFormat().format(ram/1024);
-    ram = ram.toString() + " KB";
+
+  let cnt=0;
+  while (cnt < 3 && ram >= 1024) {
+    ram = ram/1024;
+    cnt++;
   }
-  else {
-    ram = new Intl.NumberFormat().format(ram);
+  ram = new Intl.NumberFormat().format(ram);
+  if (cnt == 0) {
     ram = ram.toString() + " Byte";
   }
+  else if (cnt == 1) {
+    ram = ram.toString() + " KB";
+  }
+  else if (cnt == 2) {
+    ram = ram.toString() + " MB";
+  }
+  else if (cnt == 3) {
+    ram = ram.toString() + " GB";
+  }
+
   return ram;
 }
 
-function beautifyBandwidth(netLimit) {
-  let bandwidth = 'used ' + beautifyRam(netLimit.used);
-  bandwidth += ', available ' + beautifyRam(netLimit.available);
-  bandwidth += ', max ' + beautifyRam(netLimit.max);
-  return bandwidth;
+// function getResourceStr(netLimit) {
+//   let bandwidth = 'used ' + beautifyRam(netLimit.used);
+//   bandwidth += ', available ' + beautifyRam(netLimit.available);
+//   bandwidth += ', max ' + beautifyRam(netLimit.max);
+//   return bandwidth;
+// }
+
+// Applicable for RAM and Bandwidth
+function getResourceStr(resource, cpu) {
+  let resourceStr = new Intl.NumberFormat().format(resource.used / resource.max).toString();
+  resourceStr += ' % ';
+  if (cpu) {
+    resourceStr += '(' + new Intl.NumberFormat().format(resource.used).toString() + ' µs';
+  }
+  else {
+    resourceStr += '(' + beautifyRam(resource.used);
+  }
+  if (cpu) {
+    resourceStr += ' / ' + new Intl.NumberFormat().format(resource.max).toString() + ' µs';
+  }
+  else {
+    resourceStr += ' / ' + beautifyRam(resource.max);
+  }
+  resourceStr += ')';
+  return resourceStr;
 }
 
 httpsApp.post('/lookupacct', function(req, res, status){
 	eos.getAccount(req.body.targetAcct).then(result=>{
 		let account = req.body.targetAcct;
 		let created = result.created;
-		let ram = beautifyRam(result.ram_quota);
-    let bandwidth = beautifyBandwidth(result.net_limit);
-    console.log('lookupacct - ram: ', ram, ', bandwidth: ', bandwidth);
+		
+    // let ram = beautifyRam(result.ram_quota);
+    let ramStr = getResourceStr({used: result.ram_usage, max: result.ram_quota});
+    let bandwidthStr = getResourceStr(result.net_limit);
+    console.log('lookupacct - ram: ', ramStr, ', bandwidth: ', bandwidthStr);
 		let keyreturn = result.permissions[0].required_auth.keys[0].key;
-		res.send({account: account, created: created, ram: ram, bandwidth: bandwidth, pubkey: keyreturn});
+		res.send({account: account, 
+      created: created, 
+      ram: {str: ramStr, used: result.ram_usage, max: result.ram_quota},
+      bandwidth: {str: bandwidthStr, used: result.net_limit.used, max: result.net_limit.max},
+      pubkey: keyreturn});
 		res.end();
 	}).catch(err=>{res.send(err); res.end(); console.log('lookupacct error: ', err);});
 });
@@ -164,11 +202,13 @@ httpsApp.post('/getbalance', function (req, res){
 httpsApp.post('/pubtoacct', function(req, res){
 	eos.getAccount(req.body.account_target).then(result=>{
     // let ram_quota = new Intl.NumberFormat().format(result.ram_quota);
-    let ram_quota = beautifyRam(result.ram_quota);
-		let ram_usage = beautifyRam(result.ram_usage);
+    // let ram_quota = beautifyRam(result.ram_quota);
+		// let ram_usage = beautifyRam(result.ram_usage);
+    let ramStr = getResourceStr({used: result.ram_usage, max: result.ram_quota});
 		//let bandwidth = result.delegated_bandwidth;
-    let bandwidth = beautifyBandwidth(result.net_limit);
-    let cpu_limit = new Intl.NumberFormat().format(result.cpu_limit.available) + ' µs'; 
+    let bandwidthStr = getResourceStr(result.net_limit);
+    // let cpu_limit = new Intl.NumberFormat().format(result.cpu_limit.available) + ' µs'; 
+    let cpuStr = getResourceStr({used: result.cpu_limit.used, max: result.cpu_limit.max}, true);
 		let created = result.created;
 		let account = result.account_name;
 		let requiredkey = result.permissions[0].required_auth.keys[0].key;
@@ -179,10 +219,12 @@ httpsApp.post('/pubtoacct', function(req, res){
 					returnkey: requiredkey,
 					account: account,
 					balances: {balances: balances},
-					ram_quota: ram_quota,
-					cpu_limit: cpu_limit,
-					ram_usage: ram_usage,
-					bandwidth: bandwidth,
+					// ram_quota: ram_quota,
+					// ram_usage: ram_usage,
+          ram: {str: ramStr, used: result.ram_usage, max: result.ram_quota},
+					// cpu_limit: cpu_limit,
+          cpu: {str: cpuStr, used: result.cpu_limit.used, max: result.cpu_limit.max},
+          bandwidth: {str: bandwidthStr, used: result.net_limit.used, max: result.net_limit.max},
 					created: created
 				});
 				res.end();

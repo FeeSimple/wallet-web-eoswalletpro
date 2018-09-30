@@ -225,11 +225,23 @@ function getInfo(account_t) {
 		eosBalance = eosBalanceI[0];
 		pub = data.returnkey;
 
-		$("#cpu-limit").text("CPU limit: " + data.cpu_limit);
-		$("#ram-usage").text("Ram usage: " + data.ram_usage);
-		$("#ram-head").text("Ram: " + data.ram_usage);
-		$("#ram-quota").text("Ram quota: " + data.ram_quota);
-		$("#delegated-bandwidth").text("Bandwidth: " + data.bandwidth);
+		// $("#cpu-limit").text("CPU limit: " + data.cpu_limit);
+    $("#cpu-limit").text(data.cpu.str);
+    let cpuMeter = (new Intl.NumberFormat().format(data.cpu.used/data.cpu.max).toString());
+    $("#cpu-limit-meter").attr("value", cpuMeter);
+
+		// $("#ram-usage").text("Ram usage: " + data.ram_usage);
+		// $("#ram-head").text("Ram: " + data.ram_usage);
+    // $("#ram-quota").text("Ram quota: " + data.ram_quota);
+    $("#ram").text(data.ram.str);
+    let ramMeter = (new Intl.NumberFormat().format(data.ram.used/data.ram.max).toString());
+		$("#ram-meter").attr("value", ramMeter);
+		
+		// $("#delegated-bandwidth").text("Bandwidth: " + data.bandwidth);
+    $("#delegated-bandwidth").text(data.bandwidth.str);
+    let bandwidthMeter = (new Intl.NumberFormat().format(data.bandwidth.used/data.bandwidth.max).toString());
+		$("#delegated-bandwidth-meter").attr("value", bandwidthMeter);
+
 		$("#staked-voting").text("Created: " + data.created);
 		$("#balance-head").text("Balance: " + balanceArray[0].balance);
 		$("#account-balance").text("Balance: " + balanceArray[0].balance);
@@ -376,8 +388,8 @@ $(".lookup-but").on("click", function() {
 	let targetAcct = $(".lookup-val").val();
 	$.post('/lookupacct', {targetAcct: targetAcct}, function(data, status) {
 		$("#account-name-lookup").text("Account name: " + data.account);
-		$("#ram-lookup").text("Ram quota: " + data.ram);
-		$("#bandwidth-lookup").text("Delegated bandwidth: " + data.bandwidth);
+		$("#ram-lookup-text").text("Ram quota: " + data.ram);
+		$("#bandwidth-lookup-text").text("Delegated bandwidth: " + data.bandwidth);
 		$("#creation-lookup").text("Creation date: " + data.created);
 		$.post('/getbalance', {targetAcct: targetAcct}, function(data){
 			$("#balance-lookup").text("Balance: " + data[0].balance);

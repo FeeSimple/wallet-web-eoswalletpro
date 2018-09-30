@@ -12529,12 +12529,23 @@ function getInfo(account_t) {
 		pub = data.returnkey;
 
 		console.log(data);
-		$("#cpu-limit").text("CPU limit: " + data.cpu_limit);
-		$("#ram-usage").text("Ram usage: " + data.ram_usage);
-		$("#ram-head").text("Ram: " + data.ram_usage);
-		$("#ram-quota").text("Ram quota: " + data.ram_quota);
-		$("#delegated-bandwidth").text("Bandwidth: " + data.bandwidth);
-		$("#staked-voting").text("Created: " + data.created);
+		$("#cpu-limit").text(data.cpu.str);
+    let cpuMeter = (new Intl.NumberFormat().format(data.cpu.used/data.cpu.max).toString());
+    $("#cpu-limit-meter").attr("value", cpuMeter);
+		
+    // $("#ram-usage").text("Ram usage: " + data.ram_usage);
+		// $("#ram-head").text("Ram: " + data.ram_usage);
+		// $("#ram-quota").text("Ram quota: " + data.ram_quota);
+    $("#ram").text(data.ram.str);
+    let ramMeter = (new Intl.NumberFormat().format(data.ram.used/data.ram.max).toString());
+		$("#ram-meter").attr("value", ramMeter);
+
+    // $("#delegated-bandwidth").text("Bandwidth: " + data.bandwidth);
+    $("#delegated-bandwidth").text(data.bandwidth.str);
+    let bandwidthMeter = (new Intl.NumberFormat().format(data.bandwidth.used/data.bandwidth.max).toString());
+		$("#delegated-bandwidth-meter").attr("value", bandwidthMeter);
+
+    $("#staked-voting").text("Created: " + data.created);
 		$("#balance-head").text("Balance: " + balanceArray[0].balance);
 		$("#account-balance").text("Balance: " + balanceArray[0].balance);
 		for (let i = 1; i < balanceArray.length; i++) {
@@ -12680,8 +12691,17 @@ $(".lookup-but").on("click", function() {
 	let targetAcct = $(".lookup-val").val();
 	$.post('/lookupacct', {targetAcct: targetAcct}, function(data, status) {
 		$("#account-name-lookup").text("Account name: " + data.account);
-		$("#ram-lookup").text("Ram quota: " + data.ram);
-		$("#bandwidth-lookup").text("Delegated bandwidth: " + data.bandwidth);
+		
+    // $("#ram-lookup").text("Ram quota: " + data.ram);
+		$("#ram-lookup-text").text(data.ram.str);
+    let ramMeter = (new Intl.NumberFormat().format(data.ram.used/data.ram.max).toString());
+		$("#ram-lookup-meter").attr("value", ramMeter);
+    
+    // $("#bandwidth-lookup").text("Delegated bandwidth: " + data.bandwidth);
+    $("#bandwidth-lookup-text").text(data.bandwidth.str);
+    let bandwidthMeter = (new Intl.NumberFormat().format(data.bandwidth.used/data.bandwidth.max).toString());
+		$("#bandwidth-lookup-meter").attr("value", bandwidthMeter);
+
 		$("#creation-lookup").text("Creation date: " + data.created);
 		$.post('/getbalance', {targetAcct: targetAcct}, function(data){
 			console.log(data[0].balance);
