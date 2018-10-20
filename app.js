@@ -150,8 +150,8 @@ function beautifyCpu(cpuAmount) {
   let cpu = cpuAmount;
 
   let cnt=0;
-  while (cnt < 2 && cpu >= 1024) {
-    cpu = cpu/1024;
+  while (cnt < 2 && cpu >= 1000) {
+    cpu = cpu/1000;
     cnt++;
   }
   cpu = new Intl.NumberFormat().format(cpu);
