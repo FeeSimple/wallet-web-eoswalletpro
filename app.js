@@ -146,6 +146,28 @@ function beautifyRam(ramAmount) {
   return ram;
 }
 
+function beautifyCpu(cpuAmount) {
+  let cpu = cpuAmount;
+
+  let cnt=0;
+  while (cnt < 2 && cpu >= 1024) {
+    cpu = cpu/1024;
+    cnt++;
+  }
+  cpu = new Intl.NumberFormat().format(cpu);
+  if (cnt == 0) {
+    cpu = cpu.toString() + " µs";
+  }
+  else if (cnt == 1) {
+    cpu = cpu.toString() + " ms";
+  }
+  else if (cnt == 2) {
+    cpu = cpu.toString() + " s";
+  }
+
+  return cpu;
+}
+
 // function getResourceStr(netLimit) {
 //   let bandwidth = 'used ' + beautifyRam(netLimit.used);
 //   bandwidth += ', available ' + beautifyRam(netLimit.available);
@@ -153,18 +175,19 @@ function beautifyRam(ramAmount) {
 //   return bandwidth;
 // }
 
-// Applicable for RAM and Bandwidth
+// Applicable for RAM, Bandwidth and also CPU
 function getResourceStr(resource, cpu) {
-  let resourceStr = new Intl.NumberFormat().format((resource.used/resource.max) * 100).toString();
+  let resourceAvailable = resource.max - resource.used
+  let resourceStr = new Intl.NumberFormat().format((resourceAvailable/resource.max) * 100).toString();
   resourceStr += ' % ';
   if (cpu) {
-    resourceStr += '(' + new Intl.NumberFormat().format(resource.used).toString() + ' µs';
+    resourceStr += '(' + beautifyCpu(resourceAvailable);
   }
   else {
-    resourceStr += '(' + beautifyRam(resource.used);
+    resourceStr += '(' + beautifyRam(resourceAvailable);
   }
   if (cpu) {
-    resourceStr += ' / ' + new Intl.NumberFormat().format(resource.max).toString() + ' µs';
+    resourceStr += ' / ' + beautifyCpu(resourceAvailable);
   }
   else {
     resourceStr += ' / ' + beautifyRam(resource.max);

@@ -234,12 +234,12 @@ function getInfo(account_t) {
 		// $("#ram-head").text("Ram: " + data.ram_usage);
     // $("#ram-quota").text("Ram quota: " + data.ram_quota);
     $("#ram").text(data.ram.str);
-    let ramMeter = (new Intl.NumberFormat().format(data.ram.used/data.ram.max).toString());
+    let ramMeter = (new Intl.NumberFormat().format(1-(data.ram.used/data.ram.max)).toString());
 		$("#ram-meter").attr("value", ramMeter);
 		
 		// $("#delegated-bandwidth").text("Bandwidth: " + data.bandwidth);
     $("#delegated-bandwidth").text(data.bandwidth.str);
-    let bandwidthMeter = (new Intl.NumberFormat().format(data.bandwidth.used/data.bandwidth.max).toString());
+    let bandwidthMeter = (new Intl.NumberFormat().format(1-(data.bandwidth.used/data.bandwidth.max)).toString());
 		$("#delegated-bandwidth-meter").attr("value", bandwidthMeter);
 
 		$("#staked-voting").text("Created: " + data.created);
