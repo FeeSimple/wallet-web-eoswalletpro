@@ -12530,7 +12530,7 @@ function getInfo(account_t) {
 
 		console.log(data);
 		$("#cpu-limit").text(data.cpu.str);
-    let cpuMeter = (new Intl.NumberFormat().format(data.cpu.used/data.cpu.max).toString());
+    let cpuMeter = (new Intl.NumberFormat().format(1-(data.cpu.used/data.cpu.max)).toString());
     $("#cpu-limit-meter").attr("value", cpuMeter);
 		
     // $("#ram-usage").text("Ram usage: " + data.ram_usage);
