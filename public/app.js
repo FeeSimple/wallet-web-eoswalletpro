@@ -12367,7 +12367,7 @@ $("#scatter-unlock").on("click", function() {
 	if(foundScatter) {
 
 		//returns public key
-		scatter.getIdentity({accounts:[{blockchain:'eos', httpEndpoint: 'http://138.197.194.220:8877/', chainId: "1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32"}]}).then(identity => {
+		scatter.getIdentity({accounts:[{blockchain:'eos', httpEndpoint: 'http://165.22.134.182:8877/', chainId: "1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32"}]}).then(identity => {
 			//const eos = scatter.eos( network, Eos.Localnet(), {} );
 			//console.log(eos);
 			if (identity.accounts) {

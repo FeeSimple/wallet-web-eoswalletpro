@@ -23,7 +23,7 @@ const adminAccount = {
 const eosConfig = {
 	chainId: '1c6ae7719a2a3b4ecb19584a30ff510ba1b6ded86e1fd8b8fc22f1179c622a32',
 	keyProvider: adminAccount.privKey,
-	httpEndpoint: 'http://138.197.194.220:8877',
+	httpEndpoint: 'http://165.22.134.182:8877',
 	expireInSeconds: 60,
 	verbose: true,
 	broadcast: true,
